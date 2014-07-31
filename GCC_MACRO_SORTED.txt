@@ -1,0 +1,239 @@
+#define __amd64
+#define __amd64__
+#define __ATOMIC_ACQ_REL
+#define __ATOMIC_ACQUIRE
+#define __ATOMIC_CONSUME
+#define __ATOMIC_HLE_ACQUIRE
+#define __ATOMIC_HLE_RELEASE
+#define __ATOMIC_RELAXED
+#define __ATOMIC_RELEASE
+#define __ATOMIC_SEQ_CST
+#define __BIGGEST_ALIGNMENT__
+#define __BYTE_ORDER__
+#define __CHAR16_TYPE__ short unsigned
+#define __CHAR32_TYPE__ unsigned
+#define __CHAR_BIT__
+#define __code_model_small__
+#define __DBL_DECIMAL_DIG__
+#define __DBL_DENORM_MIN__
+#define __DBL_DIG__
+#define __DBL_EPSILON__
+#define __DBL_HAS_DENORM__
+#define __DBL_HAS_INFINITY__
+#define __DBL_HAS_QUIET_NAN__
+#define __DBL_MANT_DIG__
+#define __DBL_MAX__
+#define __DBL_MAX_10_EXP__
+#define __DBL_MAX_EXP__
+#define __DBL_MIN__
+#define __DBL_MIN_10_EXP__
+#define __DBL_MIN_EXP__
+#define __DEC128_EPSILON__
+#define __DEC128_MANT_DIG__
+#define __DEC128_MAX__
+#define __DEC128_MAX_EXP__
+#define __DEC128_MIN__
+#define __DEC128_MIN_EXP__
+#define __DEC128_SUBNORMAL_MIN__
+#define __DEC32_EPSILON__
+#define __DEC32_MANT_DIG__
+#define __DEC32_MAX__
+#define __DEC32_MAX_EXP__
+#define __DEC32_MIN__
+#define __DEC32_MIN_EXP__
+#define __DEC32_SUBNORMAL_MIN__
+#define __DEC64_EPSILON__
+#define __DEC64_MANT_DIG__
+#define __DEC64_MAX__
+#define __DEC64_MAX_EXP__
+#define __DEC64_MIN__
+#define __DEC64_MIN_EXP__
+#define __DEC64_SUBNORMAL_MIN__
+#define __DEC_EVAL_METHOD__
+#define __DECIMAL_BID_FORMAT__
+#define __DECIMAL_DIG__
+#define __ELF__
+#define __FINITE_MATH_ONLY__
+#define __FLOAT_WORD_ORDER__
+#define __FLT_DECIMAL_DIG__
+#define __FLT_DENORM_MIN__
+#define __FLT_DIG__
+#define __FLT_EPSILON__
+#define __FLT_EVAL_METHOD__
+#define __FLT_HAS_DENORM__
+#define __FLT_HAS_INFINITY__
+#define __FLT_HAS_QUIET_NAN__
+#define __FLT_MANT_DIG__
+#define __FLT_MAX__
+#define __FLT_MAX_10_EXP__
+#define __FLT_MAX_EXP__
+#define __FLT_MIN__
+#define __FLT_MIN_10_EXP__
+#define __FLT_MIN_EXP__
+#define __FLT_RADIX__
+#define __FXSR__
+#define __GCC_ATOMIC_BOOL_LOCK_FREE
+#define __GCC_ATOMIC_CHAR16_T_LOCK_FREE
+#define __GCC_ATOMIC_CHAR32_T_LOCK_FREE
+#define __GCC_ATOMIC_CHAR_LOCK_FREE
+#define __GCC_ATOMIC_INT_LOCK_FREE
+#define __GCC_ATOMIC_LLONG_LOCK_FREE
+#define __GCC_ATOMIC_LONG_LOCK_FREE
+#define __GCC_ATOMIC_POINTER_LOCK_FREE
+#define __GCC_ATOMIC_SHORT_LOCK_FREE
+#define __GCC_ATOMIC_TEST_AND_SET_TRUEVAL
+#define __GCC_ATOMIC_WCHAR_T_LOCK_FREE
+#define __GCC_HAVE_DWARF2_CFI_ASM
+#define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_1
+#define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_2
+#define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4
+#define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_8
+#define __GNUC__
+#define __GNUC_GNU_INLINE__
+#define __GNUC_MINOR__
+#define __GNUC_PATCHLEVEL__
+#define __gnu_linux__
+#define __GXX_ABI_VERSION
+#define __INT16_C(c)
+#define __INT16_MAX__
+#define __INT16_TYPE__ short
+#define __INT32_C(c)
+#define __INT32_MAX__
+#define __INT32_TYPE__
+#define __INT64_C(c) c ##
+#define __INT64_MAX__
+#define __INT64_TYPE__ long
+#define __INT8_C(c)
+#define __INT8_MAX__
+#define __INT8_TYPE__ signed
+#define __INT_FAST16_MAX__
+#define __INT_FAST16_TYPE__ long
+#define __INT_FAST32_MAX__
+#define __INT_FAST32_TYPE__ long
+#define __INT_FAST64_MAX__
+#define __INT_FAST64_TYPE__ long
+#define __INT_FAST8_MAX__
+#define __INT_FAST8_TYPE__ signed
+#define __INT_LEAST16_MAX__
+#define __INT_LEAST16_TYPE__ short
+#define __INT_LEAST32_MAX__
+#define __INT_LEAST32_TYPE__
+#define __INT_LEAST64_MAX__
+#define __INT_LEAST64_TYPE__ long
+#define __INT_LEAST8_MAX__
+#define __INT_LEAST8_TYPE__ signed
+#define __INT_MAX__
+#define __INTMAX_C(c) c ##
+#define __INTMAX_MAX__
+#define __INTMAX_TYPE__ long
+#define __INTPTR_MAX__
+#define __INTPTR_TYPE__ long
+#define __k8
+#define __k8__
+#define __LDBL_DENORM_MIN__
+#define __LDBL_DIG__
+#define __LDBL_EPSILON__
+#define __LDBL_HAS_DENORM__
+#define __LDBL_HAS_INFINITY__
+#define __LDBL_HAS_QUIET_NAN__
+#define __LDBL_MANT_DIG__
+#define __LDBL_MAX__
+#define __LDBL_MAX_10_EXP__
+#define __LDBL_MAX_EXP__
+#define __LDBL_MIN__
+#define __LDBL_MIN_10_EXP__
+#define __LDBL_MIN_EXP__
+#define linux
+#define __linux
+#define __linux__
+#define __LONG_LONG_MAX__
+#define __LONG_MAX__
+#define _LP64
+#define __LP64__
+#define __MMX__
+#define __NO_INLINE__
+#define __ORDER_BIG_ENDIAN__
+#define __ORDER_LITTLE_ENDIAN__
+#define __ORDER_PDP_ENDIAN__
+#define __PRAGMA_REDEFINE_EXTNAME
+#define __PTRDIFF_MAX__
+#define __PTRDIFF_TYPE__ long
+#define __REGISTER_PREFIX__
+#define __SCHAR_MAX__
+#define __SHRT_MAX__
+#define __SIG_ATOMIC_MAX__
+#define __SIG_ATOMIC_MIN__ (-__SIG_ATOMIC_MAX__ -
+#define __SIG_ATOMIC_TYPE__
+#define __SIZE_MAX__
+#define __SIZEOF_DOUBLE__
+#define __SIZEOF_FLOAT__
+#define __SIZEOF_INT__
+#define __SIZEOF_INT128__
+#define __SIZEOF_LONG__
+#define __SIZEOF_LONG_DOUBLE__
+#define __SIZEOF_LONG_LONG__
+#define __SIZEOF_POINTER__
+#define __SIZEOF_PTRDIFF_T__
+#define __SIZEOF_SHORT__
+#define __SIZEOF_SIZE_T__
+#define __SIZEOF_WCHAR_T__
+#define __SIZEOF_WINT_T__
+#define __SIZE_TYPE__ long unsigned
+#define __SSE__
+#define __SSE2__
+#define __SSE2_MATH__
+#define __SSE_MATH__
+#define __SSP__
+#define __STDC__
+#define __STDC_HOSTED__
+#define __STDC_IEC_559__
+#define __STDC_IEC_559_COMPLEX__
+#define __STDC_ISO_10646__
+#define __STDC_NO_THREADS__
+#define _STDC_PREDEF_H
+#define __UINT16_C(c)
+#define __UINT16_MAX__
+#define __UINT16_TYPE__ short unsigned
+#define __UINT32_C(c) c ##
+#define __UINT32_MAX__
+#define __UINT32_TYPE__ unsigned
+#define __UINT64_C(c) c ##
+#define __UINT64_MAX__
+#define __UINT64_TYPE__ long unsigned
+#define __UINT8_C(c)
+#define __UINT8_MAX__
+#define __UINT8_TYPE__ unsigned
+#define __UINT_FAST16_MAX__
+#define __UINT_FAST16_TYPE__ long unsigned
+#define __UINT_FAST32_MAX__
+#define __UINT_FAST32_TYPE__ long unsigned
+#define __UINT_FAST64_MAX__
+#define __UINT_FAST64_TYPE__ long unsigned
+#define __UINT_FAST8_MAX__
+#define __UINT_FAST8_TYPE__ unsigned
+#define __UINT_LEAST16_MAX__
+#define __UINT_LEAST16_TYPE__ short unsigned
+#define __UINT_LEAST32_MAX__
+#define __UINT_LEAST32_TYPE__ unsigned
+#define __UINT_LEAST64_MAX__
+#define __UINT_LEAST64_TYPE__ long unsigned
+#define __UINT_LEAST8_MAX__
+#define __UINT_LEAST8_TYPE__ unsigned
+#define __UINTMAX_C(c) c ##
+#define __UINTMAX_MAX__
+#define __UINTMAX_TYPE__ long unsigned
+#define __UINTPTR_MAX__
+#define __UINTPTR_TYPE__ long unsigned
+#define unix
+#define __unix
+#define __unix__
+#define __USER_LABEL_PREFIX__
+#define __VERSION__
+#define __WCHAR_MAX__
+#define __WCHAR_MIN__ (-__WCHAR_MAX__ -
+#define __WCHAR_TYPE__
+#define __WINT_MAX__
+#define __WINT_MIN__
+#define __WINT_TYPE__ unsigned
+#define __x86_64
+#define __x86_64__
