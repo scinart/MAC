@@ -48,6 +48,28 @@ public:
         Net[u]->rev = Net[v];
         Net[v]->rev = Net[u];
     }
+    void add_bidirectional_edge(int u,int v,int w)
+    {
+        Net[u] = new((void*) data++) edge(v, w, Net[u]);
+        Net[v] = new((void*) data++) edge(u, w, Net[v]);
+        Net[u]->rev = Net[v];
+        Net[v]->rev = Net[u];
+    }
+
+    void reset()
+    {
+        for(int i=0; i<maxnode;i++)
+        {
+            edge* this_ = Net[i];
+            while(this_)
+            {
+                this_->cap += this_->flow;
+                this_->flow = 0;
+                this_ = this_->next;
+            }
+        }
+    }
+
     void rev_BFS()
     {
         int Q[maxnode], head = 0, tail = 0;
