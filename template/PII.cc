@@ -14,6 +14,7 @@ public:
     {
         first = rhs.first;
         second = rhs.second;
+        return *this;
     }
     bool operator==(const PTT& rhs)const
     {
@@ -45,6 +46,7 @@ public:
         second = rhs.second;
         third=rhs.third;
         fourth=rhs.fourth;
+        return *this;
     }
     bool operator==(const PTTTT& rhs)const
     {
@@ -77,6 +79,7 @@ public:
         first = rhs.first;
         second = rhs.second;
         third=rhs.third;
+        return *this;
     }
     bool operator==(const PTTT& rhs)const
     {
