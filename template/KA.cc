@@ -8,8 +8,8 @@ using namespace std;
 #define FOR(i, a, b) for (int i = (a); i < (b); i++)
 #define ROF(i, a, b) for (int i = (b); --i >= (a); )
 
-const int N = 1024;
-//#error please specify N;
+const int N = ...;
+#error please specify N;
 unsigned char a[N+1];
 int sa[N], rnk[N], lcp[N], q[N];
 int _rmq_d[N][30];
