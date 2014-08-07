@@ -1,7 +1,7 @@
 // -*- coding: utf-8 -*-
 // C++ Big integer Class.
 // created: 2014-06-27 18:46:37
-// Time-stamp: <2014-06-28 16:18:10 scinart>
+// Time-stamp: <2014-08-07 20:51:21 scinart>
 
 #include <cctype>
 #include <string>
@@ -40,7 +40,7 @@ public:
         for_each(digits.begin(),digits.end(),dec_0_);
     }
     BigInt(const BigInt& rhs):digits(rhs.digits),sign(rhs.sign),base(rhs.base){}
-    BigInt(unsigned u):digits(SSTR(u)),sign(u>0), base(10) {//base10 专用
+    BigInt(unsigned u):digits(SSTR(u)),sign(u>0), base(10){//base10 专用
         std::reverse(digits.begin(), digits.end());
         for_each(digits.begin(),digits.end(),dec_0_);
     }
@@ -58,11 +58,22 @@ public:
         for_each(str.begin(),str.end(),inc_0_);
         return ((bi.sign<0)?(os<<'-'<<str):(os<<str));
     }
+    string to_string()
+    {
+        //base10或以下 专用
+        string str(digits);
+        std::reverse(str.begin(), str.end());
+        for_each(str.begin(),str.end(),inc_0_);
+        return str;
+    }
 
     BigInt& normalize();
     BigInt& take_negative(){sign=-sign; return *this;}
     BigInt& force_negative(){sign=sign?-1:0; return *this;}
     BigInt& force_positive(){sign=sign?1:0; return *this;}
+    bool is_positive()const{return sign>0;}
+    bool is_negetive()const{return sign<0;}
+    bool is_netrual()const{return sign==0;}
     // the following must have the same base.
     BigInt& operator=(const BigInt& rhs){digits=rhs.digits; sign=rhs.sign; return *this;}
     bool abslt(const BigInt& rhs)const
@@ -85,11 +96,12 @@ public:
     BigInt operator-(const BigInt& rhs)const;
     BigInt& operator-=(const BigInt& rhs);
     BigInt operator*(const BigInt& rhs)const;
+    BigInt& operator*=(const uint_8& digit);
     BigInt& operator*=(const BigInt& rhs);
-private:
-    BigInt operator%(const BigInt& rhs)const;
-    BigInt& operator%=(const BigInt& rhs);
-    BigInt& operator%=(const uint_8& rhs);
+    void operator/(const BigInt& rhs, BigInt& ans, BigInt& mod)
+    {
+        
+    }
 public:
     BigInt& operator<<=(int bits){if(sign) {string s(bits,char(0)); digits=s+digits;} return *this;}
     BigInt& operator>>=(int bits){if(sign) {digits = digits.substr(bits);} return *this;}
@@ -109,7 +121,6 @@ BigInt& BigInt::normalize()
     }
     return *this;
 }
-
 BigInt BigInt::operator+(const BigInt& rhs)const
 {
     if(digits.length()>=rhs.digits.length())
@@ -203,21 +214,14 @@ BigInt& BigInt::operator+=(const BigInt& rhs)
     }
     return *this;
 }
-BigInt BigInt::operator%(const BigInt& rhs)const
-{
-    if(digits.length()>=rhs.digits.length())
-        return (BigInt(*this)%=rhs);
-    else
-        return (BigInt(rhs)%=(*this));
-}
 BigInt BigInt::operator*(const BigInt& rhs)const
 {
-    if(this->sign * rhs.sign >=0)
-        return ((*this)%rhs);
+    if(digits.length()>=rhs.digits.length())
+        return (BigInt(*this)*=rhs);
     else
-        return ((*this)%rhs).force_negative();
+        return (BigInt(rhs)*=(*this));
 }
-BigInt& BigInt::operator%=(const uint_8& digit)
+BigInt& BigInt::operator*=(const uint_8& digit)
 {
     if(digit)
     {
@@ -236,27 +240,20 @@ BigInt& BigInt::operator%=(const uint_8& digit)
 }
 BigInt& BigInt::operator*=(const BigInt& rhs)
 {
-    if(this->sign * rhs.sign >=0)
-        return ((*this)%=rhs);
-    else
-        return ((*this)%rhs).force_negative();
-}
-BigInt& BigInt::operator%=(const BigInt& rhs)
-{
     int this_len = digits.length();
     int rhs_len = rhs.digits.length();
     if(this_len>=rhs_len)
     {
         if(rhs_len==1)
         {
-            return (*this)%=(rhs.digits[0]);
+            (*this)*=(rhs.digits[0]);
         }
         else
         {
             int m2 = (this_len>>1);
-            BigInt highM(digits.substr(m2), sign, base);
-            BigInt lowM(digits.substr(0, m2), sign, base); lowM.normalize();
-            BigInt lowm(rhs.digits.substr(0, m2), rhs.sign, rhs.base); lowm.normalize();
+            BigInt highM(digits.substr(m2), 1, base);
+            BigInt lowM(digits.substr(0, m2), 1, base); lowM.normalize();
+            BigInt lowm(rhs.digits.substr(0, m2), 1, rhs.base); lowm.normalize();
             BigInt highm;
             if(m2>=rhs_len)
             {
@@ -264,13 +261,12 @@ BigInt& BigInt::operator%=(const BigInt& rhs)
             }
             else
             {
-                highm = BigInt(rhs.digits.substr(m2), rhs.sign, rhs.base);
+                highm = BigInt(rhs.digits.substr(m2), 1, rhs.base);
             }
-            BigInt z0(lowM % lowm);
-            BigInt z1((lowM+highM)%(lowm+highm));
-            BigInt z2(highM%highm);
+            BigInt z0(lowM * lowm);
+            BigInt z1((lowM+highM)*(lowm+highm));
+            BigInt z2(highM*highm);
             (*this) = (z2<<(2*m2))+((z1-z2-z0)<<(m2))+(z0);
-
 #ifdef DEBUG_MULTI
             cout<<"highM: "<<highM<<" lowM: "<<lowM<<" highm: "<<highm<<" lowm: "<<lowm<<'\n';
             cout<<"lowM+highM: "<<(lowM+highM)<<" lowm+highm: "<<(lowm+highm)<<'\n';
@@ -282,8 +278,10 @@ BigInt& BigInt::operator%=(const BigInt& rhs)
     }
     else
     {
-        (*this)=(BigInt(rhs)%=(*this));
+        (*this)=(BigInt(rhs)*=(*this));
     }
+    if(!this->is_netrual() && !rhs.is_positive())
+        this->sign = rhs.sign;
     return *this;
 }
 BigInt BigInt::operator-(const BigInt& rhs)const
@@ -300,31 +298,34 @@ BigInt& BigInt::operator-=(const BigInt& rhs)
 
 int main()
 {
-    // 10进制：
     // 用法：BigInt(sign, "string", base=10)
-    BigInt a(1, "64517");
-    BigInt c(0, "0");
-    // 用法：BigInt(int)
-    BigInt b(-654);
-    cout<<"a*b is: "<<a*b<<'\n';
-    cout<<"a<<3 is: "<<(a<<3)<<'\n';
-    if(true)
+    BigInt a(1, "123456789987654321");
+    BigInt b(1, "654321");
+
+    assert((a*b).to_string() == string("80780370281511962971041"));
+    b.force_negative();
+    assert(((a*b).to_string()) == string("80780370281511962971041"));
+    assert((a*b).is_negetive());
+
+    do
     {   // 50以下数的阶乘
         vector<BigInt> vbi;
         BigInt pro(1);
         for(int i=1; i<=50; i++)
         {
             vbi.push_back(BigInt(i));
-            cout<<i<<"! is: "<<(pro*=vbi[i-1])<<'\n';
+            pro*=vbi[i-1];
         }
-    }
+        assert(pro.to_string() == string("30414093201713378043612608166064768844377641568960512000000000000"));
+    }while (0);
+
 
     // 8进制举例。
-    BigInt a8(1, "45", 8);
+    BigInt a8(1, "47", 8);
     BigInt b8(1, "11", 8);
 
-    cout<<"\na*b is: "<<a8*b8<<'\n';
-    cout<<"a<<3 is: "<<(a8<<3)<<'\n';
+    assert((a8*b8).to_string() == string("537"));
+    assert((a8+b8).to_string() == string("60"));
 
     return 0;
 }
@@ -334,5 +335,5 @@ int main()
 
 
 // Local Variables:
-// eval:(progn (hs-minor-mode t) (let ((hs-state '((3547 3745 hs) (3798 3953 hs) (4002 5898 hs) (5950 6081 hs) (6133 6254 hs) (6305 6519 hs) (6568 6690 hs) (6739 8113 hs) (8165 8203 hs) (8252 8281 hs))) (the-mark 'scinartspecialmarku2npbmfydfnwzwnpywxnyxjr)) (dolist (i hs-state) (if (car i) (progn (goto-char (car i)) (hs-find-block-beginning) (hs-hide-block-at-point nil nil))))) (goto-char 8424) (recenter-top-bottom))
+// eval:(progn (hs-minor-mode t) (let ((hs-state '((549 3832 hs) (3867 4065 hs) (4117 4272 hs) (4321 6217 hs) (6269 6400 hs) (6451 6665 hs) (6714 8141 hs) (8193 8231 hs) (8280 8309 hs))) (the-mark 'scinartspecialmarku2npbmfydfnwzwnpywxnyxjr)) (dolist (i hs-state) (if (car i) (progn (goto-char (car i)) (hs-find-block-beginning) (hs-hide-block-at-point nil nil))))) (goto-char 8313) (recenter-top-bottom))
 // End:
