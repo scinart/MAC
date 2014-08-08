@@ -42,6 +42,7 @@ public:
     SegmentTree(size_t N):query_head(indexof(0,N))
     { //length of Segment.
         // suppose node already has its value.
+        memset(MARK,0,sizeof(MARK));
         build(0,N);
     }
     Valtype query(int l,int r)
