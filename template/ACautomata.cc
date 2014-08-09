@@ -10,28 +10,34 @@ using namespace std;
 
 const int  Sigma = 26; //字母表大小
 const char Alpha = 'a';//字母表首字母
+
+struct Node
+{
+    Node* father;
+    Node* fail;
+    Node* child[Sigma];
+    int point;
+    Node()
+    {
+        father = NULL;
+        fail=NULL;
+        memset(child,0,sizeof(child));
+        point=0;
+    }
+    void* operator new(size_t, void *p){ return p; }
+
+} buffer[MAXN];
+
+
 class ACautomata
 {
 private:
     bool failPointerBuilt;
 public:
-    struct Node
-    {
-        Node* father;
-        Node* fail;
-        Node* child[Sigma];
-        int point;
-        Node()
-        {
-            father = NULL;
-            fail=NULL;
-            memset(child,0,sizeof(child));
-            point=0;
-        }
-    };
     Node* root; //¡important! root->fail MUST be NULL.
+    Node* data;
 public:
-    ACautomata(){root = new Node; failPointerBuilt=false;}
+    ACautomata():data(buffer){root = new((void*)data++) Node; failPointerBuilt=false;}
     void GC(Node*& n)
     {
         if(n==NULL) return;
@@ -49,7 +55,7 @@ public:
         {
             int where=s[i]-'a';
             if (p->child[where]==NULL)
-                p->child[where]=new Node;
+                p->child[where]=new((void*)data++) Node;
             p->child[where]->father = p;
             p=p->child[where];
         }
