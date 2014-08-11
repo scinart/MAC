@@ -23,12 +23,12 @@ typedef double T;
 //           A^{-1} = an nxn matrix (stored in _a[][])
 //           returns determinant of _a[][]
 
-const int n = 231;
-const int m = 1;
+const int n = ...;
+const int m = ...;
 
 double _a[n][n];
 double _b[n][m];
-double _tmp[n];
+double _tmp[...]; //this should be max(n,m);
 int _irow[n],_icol[n],_ipiv[n];
 T GaussJordan()
 {
@@ -50,11 +50,16 @@ T GaussJordan()
         _ipiv[pk]++;
 
         if(pj!=pk)
+        {
             for(int i=0; i<n; i++)
             {
                 _tmp[i]=_a[pj][i]; _a[pj][i]=_a[pk][i];_a[pk][i]=_tmp[i];
+            }
+            for(int i=0; i<m; i++)
+            {
                 _tmp[i]=_b[pj][i]; _b[pj][i]=_b[pk][i];_b[pk][i]=_tmp[i];
             }
+        }
         if (pj != pk) det *= -1;
         _irow[i] = pj;
         _icol[i] = pk;
