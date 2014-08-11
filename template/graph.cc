@@ -143,9 +143,14 @@ struct Graph{
     }
     void tarjan()
     {
+        memset(DFN,0,sizeof(DFN));
+        memset(LOW,0,sizeof(LOW));
+        memset(instack,0,sizeof(instack));
+        memset(Stap,0,sizeof(Stap));
+        memset(Belong,0,sizeof(Belong));
+
         int i;
         Stop=Bcnt=Dindex=0;
-        memset(DFN,0,sizeof(DFN));
         for (i=1;i<=n;i++)
             if (!DFN[i])
                 tarjan_aid(i);
