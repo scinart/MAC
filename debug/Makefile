@@ -8,11 +8,11 @@ CFLAGS  += -Wall -std=c++11
 all : gen my std
 	@echo
 gen : gen.cc
-	$(CXX) $(CFLAGS) gen.cc -o gen -O
+	$(CXX) $(CFLAGS) gen.cc -o gen -O2
 my : my.cc
-	$(CXX) $(CFLAGS) my.cc -o my -O0 -g -pg -DONLINE_JUDGE
+	$(CXX) $(CFLAGS) my.cc -o my -O2 -g -DONLINE_JUDGE
 std : std.cc
-	$(CXX) $(CFLAGS) std.cc -o std -O -DONLINE_JUDGE
+	$(CXX) $(CFLAGS) std.cc -o std -O2 -DONLINE_JUDGE
 
 clean :  
 	rm my std gen
