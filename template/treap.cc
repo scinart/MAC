@@ -14,6 +14,13 @@ unsigned lfsrrand(void){
     for(int i=0;i<31;i++) if(lfsr&1) lfsr>>=1,lfsr^=0x48000000u; else lfsr>>=1;
     return lfsr;
 }
+int somerand()
+{
+    static int x=1364684679;
+    x+=(x<<2)+1;
+    return x;
+}
+
 // 不用初始化。
 TreapNode arr[maxn];
 int nxt[maxn];
@@ -81,7 +88,7 @@ public:
     void insert(TreapType val) {
         int ranmaxl = maxl;
         sz++;
-        arr[treap_head].prio = lfsrrand();
+        arr[treap_head].prio = somerand();
         arr[treap_head].left = arr[treap_head].right = arr[treap_head].fa = -1;
         if(treap_head == maxl) {
             maxl++;
