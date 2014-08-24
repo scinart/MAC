@@ -1,6 +1,6 @@
-// Time-stamp: <2014-08-24 15:22:06 scinart>
-// created at (>>>ISO_DATE<<<) (>>>TIME<<<)
-// (>>>FILE<<<)
+// Time-stamp: <2014-08-15 23:39:55 scinart>
+// created at 2014-08-15 23:37:05
+// cf261d2B.cc
 
 #include <iostream>
 #include <cstring>
@@ -14,7 +14,6 @@
 #include <iomanip>
 #include <cmath>
 #include <deque>
-#include <stack>
 #include <utility>
 #include <map>
 #include <set>
@@ -103,7 +102,43 @@ int main()
 #endif
     std::ios::sync_with_stdio(false);
 
-    (>>>POINT<<<)
+    int n;
+    cin>>n;
+
+    vector<int> vi(n);
+
+    REP(i,n)
+    {
+        cin>>vi[i];
+    }
+
+    int MAX = *max_element(ALL(vi));
+    int MIN = *min_element(ALL(vi));
+
+    ll maxcount=0;
+    ll mincount=0;
+
+    EACH(it,vi)
+    {
+        if(*it==MAX)
+        {
+            maxcount++;
+        }
+        else if( *it==MIN)
+        {
+            mincount++;
+        }
+    }
+
+    cout<<MAX-MIN<<' ';
+    if(MAX==MIN)
+    {
+        cout<<maxcount*(maxcount-1)/2<<'\n';
+    }
+    else
+    {
+        cout<<maxcount*mincount<<'\n';
+    }
 
 
 

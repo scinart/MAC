@@ -1,6 +1,6 @@
-// Time-stamp: <2014-08-24 15:22:06 scinart>
-// created at (>>>ISO_DATE<<<) (>>>TIME<<<)
-// (>>>FILE<<<)
+// Time-stamp: <2014-08-16 00:54:03 scinart>
+// created at 2014-08-16 00:39:10
+// cf261d2D.cc
 
 #include <iostream>
 #include <cstring>
@@ -14,7 +14,6 @@
 #include <iomanip>
 #include <cmath>
 #include <deque>
-#include <stack>
 #include <utility>
 #include <map>
 #include <set>
@@ -96,16 +95,90 @@ void checkmin(T& a,const T& b){if(b<a)a=b;}
 template <typename T>
 void checkmax(T& a, const T& b){if(b>a)a=b;}
 
-int main()
-{
-#ifdef ECLIPSE
-    freopen("in.txt", "r", stdin);
-#endif
-    std::ios::sync_with_stdio(false);
+#define lson l, m, rt << 1
+#define rson m + 1, r, rt << 1 | 1
 
-    (>>>POINT<<<)
+typedef vector<int> vi;
+typedef pair<vi::iterator, vi::iterator> pii;
+
+const int maxn = 1000010;
+
+int data[maxn];
+int up[maxn];
+vi rec[maxn << 2];
+int ht[maxn];
+
+
+void build(int l, int r, int rt){
+    rec[rt].clear();
+    for (int i = l; i <= r; i++){
+        rec[rt].push_back(ht[i]);
+    }
+    int m = (l + r) >> 1;
+
+    sort(rec[rt].begin(), rec[rt].end());
+    //    for (vi::iterator ii = rec[rt].begin(); ii != rec[rt].end(); ii++){
+    //        printf("%d ", *ii);
+    //    }
+    //    puts("end\n");
+    if (l == r) return ;
+
+    build(lson);
+    build(rson);
+}
+
+int query(int L, int R, int key, int l, int r, int rt){
+    if (L <= l && r <= R){
+        pii tmp;
+        tmp = equal_range(rec[rt].begin(), rec[rt].end(), key);
+        return tmp.second - rec[rt].begin();
+    }
+    int m = (l + r) >> 1;
+    int ret = 0;
+
+    if (L <= m) ret = query(L, R, key, lson);
+    if (m < R) ret += query(L, R, key, rson);
+
+    return ret;
+}
 
 
 
+int main(){
+
+    int n;
+    scanf("%d", &n);
+
+    REP(i,n)
+    {
+        scanf("%d", &data[i]);
+    }
+
+    map<int,int> upcnt;
+    map<int,int> downcnt;
+
+    REP(i,n)
+    {
+        up[i]=++upcnt[data[i]];
+    }
+    for(int i=n-1;i>=0; i--)
+    {
+        ht[i]=++downcnt[data[i]];
+    }
+
+    // REP(i,n)cout<<up[i]<<' ';cout<<'\n';
+    // REP(i,n)cout<<ht[i]<<' ';cout<<'\n';
+
+    ll ans=0;
+    build(0, n - 1, 1);
+    for(int i=0; i<n-1; i++)
+    {
+        int l=i+1;
+        int r=n-1;
+        int k=up[i]-1;
+        ans+=query(l,r,k,0,n-1,1);
+    }
+    printf("%lld\n", ans);
     return 0;
 }
+

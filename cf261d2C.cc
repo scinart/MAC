@@ -1,6 +1,6 @@
-// Time-stamp: <2014-08-24 15:22:06 scinart>
-// created at (>>>ISO_DATE<<<) (>>>TIME<<<)
-// (>>>FILE<<<)
+// Time-stamp: <2014-08-16 00:07:33 scinart>
+// created at 2014-08-15 23:51:17
+// cf261d2C.cc
 
 #include <iostream>
 #include <cstring>
@@ -14,7 +14,6 @@
 #include <iomanip>
 #include <cmath>
 #include <deque>
-#include <stack>
 #include <utility>
 #include <map>
 #include <set>
@@ -96,6 +95,22 @@ void checkmin(T& a,const T& b){if(b<a)a=b;}
 template <typename T>
 void checkmax(T& a, const T& b){if(b>a)a=b;}
 
+long long mypow(long long n, long long m, long long mod = 0){
+    if(m < 0) return 0;
+    long long ans = 1;
+    long long k = n;
+    while(m){
+        if(m & 1) {
+            ans *= k;
+            if(mod) ans %= mod;
+        }
+        k *= k;
+        if(mod) k %= mod;
+        m >>= 1;
+    }
+    return ans;
+}
+
 int main()
 {
 #ifdef ECLIPSE
@@ -103,8 +118,55 @@ int main()
 #endif
     std::ios::sync_with_stdio(false);
 
-    (>>>POINT<<<)
+    ll n,k,d;
 
+    cin>>n>>k>>d;
+
+    if(d==1)
+    {
+        if(k>=n)
+        {
+            REP_1(i,n)
+            {
+                cout<<i<<' ';
+            }
+            cout<<'\n';
+        }
+        else
+        {
+            cout<<"-1\n";
+        }
+    }
+    else
+    {
+        bool ok=false;
+        for(int p=1; p<=d; p++)
+        {
+            if(mypow(k,p)>=n)
+            {
+                ok=true;
+                break;
+            }
+        }
+        if(ok)
+        {
+            ll lop=1;
+            REP_1(day,d)
+            {
+                REP(tempn,n)
+                {
+                    cout<<(tempn/lop)%k+1<<' ';
+                }
+                lop*=k;
+                if(lop>n)lop=n+1;
+                cout<<'\n';
+            }
+        }
+        else
+        {
+            cout<<"-1\n";
+        }
+    }
 
 
     return 0;

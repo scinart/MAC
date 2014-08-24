@@ -1,6 +1,6 @@
-// Time-stamp: <2014-08-24 15:22:06 scinart>
-// created at (>>>ISO_DATE<<<) (>>>TIME<<<)
-// (>>>FILE<<<)
+// Time-stamp: <2014-08-20 23:33:04 scinart>
+// created at 2014-08-20 23:12:14
+// cf262d2A.cc
 
 #include <iostream>
 #include <cstring>
@@ -14,7 +14,6 @@
 #include <iomanip>
 #include <cmath>
 #include <deque>
-#include <stack>
 #include <utility>
 #include <map>
 #include <set>
@@ -103,7 +102,18 @@ int main()
 #endif
     std::ios::sync_with_stdio(false);
 
-    (>>>POINT<<<)
+    int n,m;
+    cin>>n>>m;
+
+    int day=0;
+
+    while(n--)
+    {
+        day++;
+        if(day%m==0) n++;
+    }
+
+    cout<<day<<'\n';
 
 
 

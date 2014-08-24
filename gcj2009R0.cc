@@ -1,6 +1,6 @@
-// Time-stamp: <2014-08-24 15:22:06 scinart>
-// created at (>>>ISO_DATE<<<) (>>>TIME<<<)
-// (>>>FILE<<<)
+// Time-stamp: <2014-08-17 22:27:38 scinart>
+// created at 2014-08-17 21:13:13
+// gcj2009R0.cc
 
 #include <iostream>
 #include <cstring>
@@ -14,7 +14,6 @@
 #include <iomanip>
 #include <cmath>
 #include <deque>
-#include <stack>
 #include <utility>
 #include <map>
 #include <set>
@@ -96,6 +95,37 @@ void checkmin(T& a,const T& b){if(b<a)a=b;}
 template <typename T>
 void checkmax(T& a, const T& b){if(b>a)a=b;}
 
+const int MAXN = 100000;
+
+const int  Sigma = 26; //字母表大小
+const char Alpha = 'a';//字母表首字母
+
+struct Node
+{
+    bool point;
+    Node* child[Sigma];
+    void* operator new(size_t, void *p){ return p; }
+} buffer[MAXN];
+int LEN,DICSIZE,Q;
+class SimpleTrie
+{
+public:
+    Node* root; //¡important! root->fail MUST be NULL.
+    Node* data;
+public:
+    SimpleTrie():data(buffer){memset(buffer,0,sizeof(buffer));root = new((void*)data++) Node;}
+public:
+    void insert(const string& s) {
+        Node* p = root;
+        for (int i=0; i<LEN; i++) {
+            int where=s[i]-'a';
+            if (p->child[where]==NULL) p->child[where]=new((void*)data++) Node;
+            p=p->child[where];
+        }
+        p->point=true;
+    }
+};
+
 int main()
 {
 #ifdef ECLIPSE
@@ -103,8 +133,62 @@ int main()
 #endif
     std::ios::sync_with_stdio(false);
 
-    (>>>POINT<<<)
 
+    cin>>LEN>>DICSIZE>>Q;
+    SimpleTrie trie;
+    REP(i,DICSIZE)
+    {
+        string s;
+        cin>>s;
+        trie.insert(s);
+    }
+
+    REP_1(qq,Q)
+    {
+        string q;
+        cin>>q;
+        std::vector<Node*> mainq;
+        std::vector<Node*> aidq;
+        mainq.push_back(trie.root);
+        int inpar=false;
+        EACH(it,q)
+        {
+            switch(*it)
+            {
+              case ')':
+              {
+                  inpar=false;
+                  mainq.swap(aidq);
+                  aidq.clear();
+                  continue;
+              }
+              case '(':
+              {
+                  inpar=true;
+                  continue;
+              }
+              default:
+              {
+                  unsigned char c=*it-Alpha;
+                  if(inpar)
+                  {
+                      EACH(jt,mainq)
+                          if((*jt)->child[c]!=NULL)
+                              aidq.push_back((*jt)->child[c]);
+                  }
+                  else
+                  {
+                      EACH(jt,mainq)
+                          if((*jt)->child[c]!=NULL)
+                              aidq.push_back((*jt)->child[c]);
+                      mainq.swap(aidq);
+                      aidq.clear();
+                  }
+              }
+            }
+        }
+        cout<<"Case #"<<qq<<": "<<mainq.size()<<'\n';
+    }
 
 
     return 0;

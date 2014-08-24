@@ -1,6 +1,5 @@
-// Time-stamp: <2014-08-24 15:22:06 scinart>
-// created at (>>>ISO_DATE<<<) (>>>TIME<<<)
-// (>>>FILE<<<)
+//
+// Time-stamp: <2014-08-19 12:50:58 scinart>
 
 #include <iostream>
 #include <cstring>
@@ -14,7 +13,6 @@
 #include <iomanip>
 #include <cmath>
 #include <deque>
-#include <stack>
 #include <utility>
 #include <map>
 #include <set>
@@ -96,16 +94,50 @@ void checkmin(T& a,const T& b){if(b<a)a=b;}
 template <typename T>
 void checkmax(T& a, const T& b){if(b>a)a=b;}
 
+const int MAXN = 100010;
+
+ll arr[MAXN];
+
 int main()
 {
-#ifdef ECLIPSE
-    freopen("in.txt", "r", stdin);
+    while(true)
+    {
+        memset(arr,0,sizeof(arr));
+        int N,M;
+        scanf("%d", &N);
+        if(N==0)break;
+        scanf("%d", &M);
+        REP(i,M)
+        {
+            int Li,Ri,Di;
+            scanf("%d%d%d", &Li, &Ri, &Di);
+            arr[Li-1]+=Di;
+            arr[Ri]-=Di;
+        }
+        for(int i=1; i<N ;i++)
+        {
+            arr[i]+=arr[i-1];
+        }
+        for(int i=N-1; i>=0; i--)
+        {
+            arr[i]+=arr[i+1];
+        }
+
+        int K;
+        scanf("%d", &K);
+        int ans=0;
+        REP(i,K)
+        {
+            ll Hi,Xi;
+#ifdef ONLINE_JUDGE
+            scanf("%I64d%I64d", &Hi,&Xi);
+#else
+            scanf("%lld%lld", &Hi, &Xi);
 #endif
-    std::ios::sync_with_stdio(false);
-
-    (>>>POINT<<<)
-
-
-
+            if(arr[Xi-1]>=Hi)
+                ans++;
+        }
+        printf("%d\n",K-ans);
+    }
     return 0;
 }

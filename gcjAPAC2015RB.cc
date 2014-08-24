@@ -1,6 +1,6 @@
-// Time-stamp: <2014-08-24 15:22:06 scinart>
-// created at (>>>ISO_DATE<<<) (>>>TIME<<<)
-// (>>>FILE<<<)
+// Time-stamp: <2014-08-18 14:41:54 scinart>
+// created at 2014-08-18 14:18:09
+// gcjAPAC2015RB.cc
 
 #include <iostream>
 #include <cstring>
@@ -14,7 +14,6 @@
 #include <iomanip>
 #include <cmath>
 #include <deque>
-#include <stack>
 #include <utility>
 #include <map>
 #include <set>
@@ -96,6 +95,105 @@ void checkmin(T& a,const T& b){if(b<a)a=b;}
 template <typename T>
 void checkmax(T& a, const T& b){if(b>a)a=b;}
 
+
+const int MAXN = 22;
+int N;
+int old[MAXN][MAXN];
+int perm[MAXN][MAXN];
+int permans[MAXN][MAXN];
+int ans[MAXN][MAXN];
+
+void rotate(int deg) //clockwise
+{
+    switch(deg)
+    {
+      case 0:
+      {
+          REP(i,N)REP(j,N)perm[i][j]=old[i][j];
+          break;
+      }
+      case 1:
+      {
+          REP(i,N)REP(j,N)perm[j][N-i-1]=old[i][j];
+          break;
+      }
+      case 2:
+      {
+          REP(i,N)REP(j,N)perm[N-1-i][N-1-j]=old[i][j];
+          break;
+      }
+      case 3:
+      {
+          REP(i,N)REP(j,N)perm[N-1-j][i]=old[i][j];
+      }
+    }
+}
+void rotate2(int deg)
+{
+    switch(deg)
+    {
+      case 0:
+      {
+          REP(i,N)REP(j,N)ans[i][j]=permans[i][j];
+          break;
+      }
+      case 1:
+      {
+          REP(i,N)REP(j,N)ans[j][N-i-1]=permans[i][j];
+          break;
+      }
+      case 2:
+      {
+          REP(i,N)REP(j,N)ans[N-1-i][N-1-j]=permans[i][j];
+          break;
+      }
+      case 3:
+      {
+          REP(i,N)REP(j,N)ans[N-1-j][i]=permans[i][j];
+      }
+    }
+}
+
+void init()
+{
+    memset(permans,0,sizeof(permans));
+}
+void insert_line(int line, int val)
+{
+    for(int i=0;;i++)
+    {
+        if(permans[line][i]==0)
+        {
+            permans[line][i]=val;
+            break;
+        }
+    }
+}
+void doline(int line)
+{
+    int last=0;
+    for(int i=0; i<N; i++)
+    {
+        int get = perm[line][i];
+        if(get!=0)
+        {
+            if(get==last)
+            {
+                insert_line(line,get<<1);
+                last=0;
+            }
+            else
+            {
+                insert_line(line,last);
+                last=get;
+            }
+        }
+    }
+    if(last!=0)
+    {
+        insert_line(line,last);
+    }
+}
 int main()
 {
 #ifdef ECLIPSE
@@ -103,8 +201,48 @@ int main()
 #endif
     std::ios::sync_with_stdio(false);
 
-    (>>>POINT<<<)
+    int T;cin>>T; REP_1(cc,T)
+    {
+        init();
+        cin>>N;
+        string s;cin>>s;
+        char direction=s[0];
+        int dir=0;
+        switch(direction)
+        {
+          case 'l':
+          {
+              dir=0;
+              break;
+          }
+          case 'd':
+          {
+              dir=1;
+              break;
+          }
+          case 'r':
+          {
+              dir=2;
+              break;
+          }
+          case 'u':
+          {
+              dir=3;
+              break;
+          }
+        }
+        REP(i,N)REP(j,N)cin>>old[i][j];
+        rotate(dir);
+        dir=(4-dir)%4;
+        for(int i=0; i<N; i++)
+        {
+            doline(i);
+        }
+        rotate2(dir);
+        cout<<"Case #"<<cc<<":\n";
+        REP(i,N){REP(j,N)cout<<ans[i][j]<<' ';cout<<'\n';}
 
+    }
 
 
     return 0;

@@ -1,6 +1,6 @@
-// Time-stamp: <2014-08-24 15:22:06 scinart>
-// created at (>>>ISO_DATE<<<) (>>>TIME<<<)
-// (>>>FILE<<<)
+// Time-stamp: <2014-08-21 01:53:11 scinart>
+// created at 2014-08-21 00:43:35
+// cf262d2D.cc
 
 #include <iostream>
 #include <cstring>
@@ -14,7 +14,6 @@
 #include <iomanip>
 #include <cmath>
 #include <deque>
-#include <stack>
 #include <utility>
 #include <map>
 #include <set>
@@ -96,6 +95,12 @@ void checkmin(T& a,const T& b){if(b<a)a=b;}
 template <typename T>
 void checkmax(T& a, const T& b){if(b>a)a=b;}
 
+ll msb(ll x)
+{
+    ll ans=1;
+    while((x>>=1))ans<<=1;
+    return ans;
+}
 int main()
 {
 #ifdef ECLIPSE
@@ -103,7 +108,142 @@ int main()
 #endif
     std::ios::sync_with_stdio(false);
 
-    (>>>POINT<<<)
+    ll l,r,k;
+    cin>>l>>r>>k;
+
+    if(r-l+1>=7 && k>=4)
+    {
+        cout<<"0\n";
+        while(l%4!=0)l++;
+        cout<<"4\n";
+        cout<<l<<' '<<l+1<<' '<<l+2<<' '<<l+3<<'\n';
+    }
+    else if(r-l+1<7)
+    {
+        //brute force;
+        int bits=r-l+1;
+        ll minans=l;
+        for(int i=1; i<(1<<bits); i++)
+        {
+            ll tempxor=0;
+            bitset<6> bs(i);
+            if(bs.count()>k)continue;
+
+            for(int b=0; b<6; b++)
+            {
+                if(bs.test(b))
+                {
+                    tempxor^=(l+b);
+                }
+            }
+            checkmin(minans,tempxor);
+        }
+
+        for(int i=1; i<(1<<bits); i++)
+        {
+            ll tempxor=0;
+            bitset<6> bs(i);
+            if(bs.count()>k)continue;
+
+            for(int b=0; b<6; b++)
+            {
+                if(bs.test(b))
+                {
+                    tempxor^=(l+b);
+                }
+            }
+            if(tempxor==minans)
+            {
+                cout<<tempxor<<'\n';
+                cout<<bs.count()<<'\n';
+                for(int b=0; b<5; b++)
+                {
+                    if(bs.test(b))
+                    {
+                        cout<<l+b<<' ';
+                    }
+                }
+                cout<<'\n';
+                break;
+            }
+        }
+    }
+    else if(k==3)
+    {
+        if(msb(l)==msb(r))
+        {
+            if((l^(l+1))==1)
+            {
+                r=l+1;
+            }
+            else
+            {
+                l++;r=l+1;
+            }
+            cout<<(l^r)<<'\n';
+            cout<<"2\n";
+            cout<<l<<' '<<r<<'\n';
+        }
+        else
+        {
+            ll ones=(msb(l)<<1)-1;
+            ll sb = ones+1+((ones+1)>>1);
+            if(r>=sb)
+            {
+                cout<<"0\n";
+                cout<<"3\n";
+                cout<<sb<<' '<<sb-1<<' '<<ones<<'\n';
+            }
+            else
+            {
+                if((l^(l+1))==1)
+                {
+                    r=l+1;
+                }
+                else
+                {
+                    l++;r=l+1;
+                }
+                cout<<(l^r)<<'\n';
+                cout<<"2\n";
+                cout<<l<<' '<<r<<'\n';
+            }
+        }
+    }
+    else if(k==2)
+    {
+        if(r-l==1)
+        {//only two candidates.
+            if((l^r)<l)
+            {
+                cout<<(l^r)<<'\n';
+                cout<<"2\n";
+                cout<<l<<' '<<r<<'\n';
+            }
+            else
+            {
+                cout<<l<<'\n'<<1<<'\n'<<l<<'\n';
+            }
+        }
+        else
+        {
+            if((l^(l+1))==1)
+            {
+                r=l+1;
+            }
+            else
+            {
+                l++;r=l+1;
+            }
+            cout<<(l^r)<<'\n';
+            cout<<"2\n";
+            cout<<l<<' '<<r<<'\n';
+        }
+    }
+    else //if(k==1)
+    {
+        cout<<l<<'\n'<<"1\n"<<l<<'\n';
+    }
 
 
 

@@ -1,6 +1,6 @@
-// Time-stamp: <2014-08-24 15:22:06 scinart>
-// created at (>>>ISO_DATE<<<) (>>>TIME<<<)
-// (>>>FILE<<<)
+// Time-stamp: <2014-08-21 00:05:02 scinart>
+// created at 2014-08-20 23:54:45
+// cf262d2B.cc
 
 #include <iostream>
 #include <cstring>
@@ -14,7 +14,6 @@
 #include <iomanip>
 #include <cmath>
 #include <deque>
-#include <stack>
 #include <utility>
 #include <map>
 #include <set>
@@ -96,6 +95,37 @@ void checkmin(T& a,const T& b){if(b<a)a=b;}
 template <typename T>
 void checkmax(T& a, const T& b){if(b>a)a=b;}
 
+
+long long mypow(long long n, long long m, long long mod = 0){
+    if(m < 0) return 0;
+    long long ans = 1;
+    long long k = n;
+    while(m){
+        if(m & 1) {
+            ans *= k;
+            if(mod) ans %= mod;
+        }
+        k *= k;
+        if(mod) k %= mod;
+        m >>= 1;
+    }
+    return ans;
+}
+
+
+int sumof(ll x)
+{
+    stringstream ss;
+    ss<<x;
+    string str;
+    ss>>str;
+    int ans=0;
+    EACH(it,str)
+    {
+        ans+=*it-'0';
+    }
+    return ans;
+}
 int main()
 {
 #ifdef ECLIPSE
@@ -103,9 +133,30 @@ int main()
 #endif
     std::ios::sync_with_stdio(false);
 
-    (>>>POINT<<<)
+    vector<ll> ans;
+    ll a,b,c;
+    cin>>a>>b>>c;
+    for(int i=1; i<=81; i++)
+    {
+        ll sxa = mypow(i,a);
+        if(sumof(b*sxa+c)==i)
+        {
+            ans.push_back(b*sxa+c);
+        }
+    }
+    sort(ALL(ans));
 
+    stringstream ss;
+    int cnt=0;
+    EACH(it,ans)
+    {
+        if(*it>0 && *it<1e9)
+        {
+            cnt++;
+            ss<<*it<<' ';
+        }
+    }
 
-
+    cout<<cnt<<'\n'<<ss.str()<<'\n';
     return 0;
 }

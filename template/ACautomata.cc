@@ -38,12 +38,7 @@ public:
     Node* data;
 public:
     ACautomata():data(buffer){root = new((void*)data++) Node; failPointerBuilt=false;}
-    void GC(Node*& n)
-    {
-        if(n==NULL) return;
-        for(int i=0; i<Sigma; i++) GC(n->child[i]);
-        delete n;
-    }
+    void GC(Node*& n){}
     ~ACautomata(){GC(root);}
 public:
     void insert(const string& s,int num = 1)

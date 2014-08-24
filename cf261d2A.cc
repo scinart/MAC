@@ -1,6 +1,6 @@
-// Time-stamp: <2014-08-24 15:22:06 scinart>
-// created at (>>>ISO_DATE<<<) (>>>TIME<<<)
-// (>>>FILE<<<)
+// Time-stamp: <2014-08-15 23:35:14 scinart>
+// created at 2014-08-15 23:26:30
+// cf261d2A.cc
 
 #include <iostream>
 #include <cstring>
@@ -14,7 +14,6 @@
 #include <iomanip>
 #include <cmath>
 #include <deque>
-#include <stack>
 #include <utility>
 #include <map>
 #include <set>
@@ -103,7 +102,28 @@ int main()
 #endif
     std::ios::sync_with_stdio(false);
 
-    (>>>POINT<<<)
+    int x1,y1,x2,y2;
+
+    cin>>x1>>y1>>x2>>y2;
+
+    if(x1==x2)
+    {
+        int diff = abs(y1-y2);
+        cout<<x1+diff<<' '<<y1<<' '<<x2+diff<<' '<<y2<<'\n';
+    }
+    else if(y1==y2)
+    {
+        int diff = abs(x1-x2);
+        cout<<x1<<' '<<y1+diff<<' '<<x2<<' '<<y2+diff<<'\n';
+    }
+    else if(abs(x1-x2) == abs(y1-y2))
+    {
+        cout<<x1<<' '<<y2<<' '<<x2<<' '<<y1<<'\n';
+    }
+    else
+    {
+        cout<<"-1\n";
+    }
 
 
 
