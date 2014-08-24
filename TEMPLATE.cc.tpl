@@ -1,4 +1,4 @@
-// Time-stamp: <2014-08-01 01:45:11 scinart>
+// Time-stamp: <2014-08-24 15:22:06 scinart>
 // created at (>>>ISO_DATE<<<) (>>>TIME<<<)
 // (>>>FILE<<<)
 
@@ -14,6 +14,7 @@
 #include <iomanip>
 #include <cmath>
 #include <deque>
+#include <stack>
 #include <utility>
 #include <map>
 #include <set>

@@ -12,7 +12,10 @@ const int N = ...;
 #error please specify N;
 unsigned char a[N+1];
 int sa[N], rnk[N], lcp[N], q[N];
+
+#ifdef KARMQ
 int _rmq_d[N][30];
+#endif
 namespace KoAluru
 {
 int n;
@@ -21,21 +24,26 @@ int *b;
 
 void RMQ_Init(const vector<int>& A)
 {
-    int n=A.size();
+    n=A.size();
+#ifdef KARMQ
     for (int i=0;i<n;i++) _rmq_d[i][0]=A[i];
     for (int j=1;(1<<j)<=n;j++)
         for (int i=0;i+(1<<j)-1<n;i++)
             _rmq_d[i][j]=min(_rmq_d[i][j-1],_rmq_d[i+(1<<(j-1))][j-1]);
+#endif
 }
 void RMQ_Init(int A[], int size)
 {
-    int n=size;
+    n=size;
+#ifdef KARMQ
     for (int i=0;i<n;i++) _rmq_d[i][0]=A[i];
     for (int j=1;(1<<j)<=n;j++)
         for (int i=0;i+(1<<j)-1<n;i++)
             _rmq_d[i][j]=min(_rmq_d[i][j-1],_rmq_d[i+(1<<(j-1))][j-1]);
+#endif
 }
 
+#ifdef KARMQ
 int __RMQ(int L,int R)
 {
     int k=0;
@@ -49,6 +57,7 @@ int lcp_range(int l,int r)
     if(l>r) swap(l,r);
     return __RMQ(l+1,r);
 }
+#endif
 
 
 template<typename T>
@@ -206,7 +215,9 @@ void KAmain(T a[], int sa[], int b[], int n, int k)
         delete[] t;
     }
     calc_rank_lcp(a, sa, rnk, lcp);
+#ifdef KARMQ
     RMQ_Init(lcp,n);
+#endif
 }
 
 };
@@ -234,9 +245,9 @@ int main()
     puts("lcp");
     REP(i, n)
         printf("%d: %d\n", i, lcp[i]);
-    int l,r;
-    while(cin>>l>>r)
-    {
-        cout<<KoAluru::lcp_range(l,r)<<'\n';
-    }
+    // int l,r;
+    // while(cin>>l>>r)
+    // {
+    //     cout<<KoAluru::lcp_range(l,r)<<'\n';
+    // }
 }

@@ -1,5 +1,5 @@
 //
-// Time-stamp: <2014-08-01 00:15:11 scinart>
+// Time-stamp: <2014-08-24 15:21:36 scinart>
 
 #include <iostream>
 #include <cstring>
@@ -13,6 +13,7 @@
 #include <iomanip>
 #include <cmath>
 #include <deque>
+#include <stack>
 #include <utility>
 #include <map>
 #include <set>
