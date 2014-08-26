@@ -1,8 +1,11 @@
 const int MAXN = ...;
 const int Sigma = 26;
+
+
 struct Node {
     Node* next[Sigma];
     Node* par; //parent
+    vector<Node*> child;
     int val; //len
     bool end; //if it is final state.
 }buffer[MAXN << 1]; //Note that the size of POOL should be doubled.
@@ -10,7 +13,7 @@ struct Node {
 class SAM {
 public:
     Node* data,*root,*last;
-    SAM():data(buffer+1),last(buffer),root(buffer)
+    SAM():data(buffer+1),root(buffer),last(buffer)
     {
         memset(buffer,0,sizeof(buffer));
     }
@@ -50,6 +53,16 @@ public:
         {
             p->end=true;
             p=p->par;
+        }
+    }
+    void buildchild()
+    {
+        for(Node* x=root; x!=data; x++)
+        {
+            if(x->par)
+            {
+                (x->par->child).push_back(x);
+            }
         }
     }
 };

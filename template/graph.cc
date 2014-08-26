@@ -3,7 +3,10 @@
 #include <deque>
 #include <cstdio>
 #include <cstring>
+
 const int maxnode = 100010;
+const double DOUBLE_INF = 1234567890123;
+const double eps=1e-6;
 
 #define BELLMAN
 #define LCA
@@ -20,21 +23,6 @@ int Belong[maxnode];
 int Stop, Bcnt, Dindex;
 #endif
 
-struct edge{
-    int ver;  // vertex
-    int cap; //capacity or cost
-    edge *next; // next arc
-    edge *rev; // reverse arc
-    bool forward; //forward or backward edge.
-    edge(){}
-    edge(int Vertex, int c, edge *Next, bool f)
-        :ver(Vertex), cap(c), next(Next), rev((edge*)NULL), forward(f){}
-    void* operator new(size_t, void *p){
-        return p;
-    }
-}*Net[maxnode];
-
-
 #ifdef LCA
   #ifndef ITERTREE
     #define ITERTREE
@@ -48,7 +36,7 @@ int iteridx[maxnode]; //第几是哪个节点
 int noderank[maxnode]; //节点第几
 int itertrace[maxnode<<1]; //这里存的是rank.
 int firstappearintrace[maxnode]; //节点第一次出现在itertrace中。
-int rank;
+int rnk;
 int trace;
 #endif
 
@@ -69,15 +57,34 @@ enum {WHITE,GREY,BLACK};
 
 
 #ifdef BELLMAN //a.k.a bellman ford.
-int dist[maxnode];
+#error long long or double?
+XXX dist[maxnode];
 int inqueue[maxnode]; //inqueue[node]>>1是次数，inqueue[node]&1是在不在queue里
 int predecessor[maxnode];
 #endif
 
+template<typename TT>
+struct edge{
+    int ver;  // vertex
+    TT cap; //capacity or cost
+    edge *next; // next arc
+    edge *rev; // reverse arc
+    bool forward; //forward or backward edge.
+    edge(){}
+    edge(int Vertex, TT c, edge *Next, bool f)
+        :ver(Vertex), cap(c), next(Next), rev((edge*)NULL), forward(f){}
+    void* operator new(size_t, void *p){
+        return p;
+    }
+};
+#error TT is int or double
+edge<TT>*Net[maxnode];
+
+template <typename TT>
 struct Graph{
-#define EACH_EDGE(e,init) for(edge* e=init; e; e=e->next)
-    edge* buffer;
-    edge* data;
+#define EACH_EDGE(e,init) for(__typeof__(init) e=init; e; e=e->next)
+    edge<TT>* buffer;
+    edge<TT>* data;
     int n;//n nodes.
     Graph(int _n,int _m):n(_n)
     {
@@ -92,16 +99,16 @@ struct Graph{
 #ifdef LCA
         rmqinited = false;
 #endif
-        buffer = new edge[2*_m];
+        buffer = new edge<TT>[2*_m];
         data = buffer;
     }
     ~Graph() {
         delete[] buffer;
     }
-    void add_edge(int u,int v, int c)
+    void add_edge(int u,int v, TT c)
     {
-        Net[u] = new((void*) data++) edge(v, c, Net[u],true);
-        Net[v] = new((void*) data++) edge(u, 0, Net[v],false);
+        Net[u] = new((void*) data++) edge<TT>(v, c, Net[u],true);
+        Net[v] = new((void*) data++) edge<TT>(u, 0, Net[v],false);
         Net[u]->rev = Net[v];
         Net[v]->rev = Net[u];
 #ifdef DEG
@@ -109,10 +116,10 @@ struct Graph{
         Node[v].indegree++;
 #endif
     }
-    void add_bidirectional_edge(int u,int v, int c)
+    void add_bidirectional_edge(int u,int v, TT c)
     {
-        Net[u] = new((void*) data++) edge(v, c, Net[u],true);
-        Net[v] = new((void*) data++) edge(u, c, Net[v],true);
+        Net[u] = new((void*) data++) edge<TT>(v, c, Net[u],true);
+        Net[v] = new((void*) data++) edge<TT>(u, c, Net[v],true);
         Net[u]->rev = Net[v];
         Net[v]->rev = Net[u];
 #ifdef DEG
@@ -137,8 +144,8 @@ struct Graph{
 
     void dfstree(int root)
     {//non-recursive
-        edge* it = Net[root];
-        std::stack<edge*> next;
+        edge<TT>* it = Net[root];
+        std::stack<edge<TT>*> next;
         while(it)
         {
             for(;it && !it->forward;it=it->next);
@@ -169,15 +176,15 @@ struct Graph{
 #ifdef ITERTREE
     void itertree(int root)
     {
-        edge* it = Net[root];
-        std::stack<edge*> next;
-        rank=0;
+        edge<TT>* it = Net[root];
+        std::stack<edge<TT>*> next;
+        rnk=0;
         trace=0;
-        iteridx[rank]=root;
-        noderank[root]=rank;
+        iteridx[rnk]=root;
+        noderank[root]=rnk;
         firstappearintrace[root]=trace;
         itertrace[trace]=noderank[root];
-        rank++;trace++;
+        rnk++;trace++;
         while(it)
         {
             for(;it && !it->forward;it=it->next); // find an edge;
@@ -216,11 +223,11 @@ struct Graph{
             {
                 it->rev->forward=false;
                 int ver=it->ver;
-                iteridx[rank]=ver;
-                noderank[ver]=rank;
+                iteridx[rnk]=ver;
+                noderank[ver]=rnk;
                 firstappearintrace[ver]=trace;
                 itertrace[trace]=noderank[ver];
-                rank++;trace++;
+                rnk++;trace++;
                 next.push(it);
                 it=Net[ver];
             }
@@ -313,7 +320,12 @@ struct Graph{
 #ifdef BELLMAN
 #define SLF
 #define LLL
-    int bellman(int s)
+    int bellman(int s);
+#endif
+};
+
+#ifdef BELLMAN
+template<> int Graph<int>::bellman(int s)
     {
         memset(inqueue,0,sizeof(inqueue));
         std::deque<int> q;
@@ -328,7 +340,7 @@ struct Graph{
         while(!q.empty())
         {
 #ifdef LLL
-            while(((long long)(dist[q.front()]))*q.size()>sumofdis)
+            while((dist[q.front()])*q.size()>sumofdis)
             {
                 q.push_back(q.front());
                 q.pop_front();
@@ -370,11 +382,70 @@ struct Graph{
         }
         return 0;
     }
+
+
+template<> int Graph<double>::bellman(int s)
+    {
+        memset(inqueue,0,sizeof(inqueue));
+        std::deque<int> q;
+        REP(i,n)dist[i]=DOUBLE_INF;
+        dist[s]=0;
+        predecessor[s]=s;
+        q.push_back(s);
+        inqueue[s]++;
+#ifdef LLL
+        double sumofdis=0;
 #endif
-};
+        while(!q.empty())
+        {
+#ifdef LLL
+            while((dist[q.front()])*q.size()>sumofdis+eps)
+            {
+                q.push_back(q.front());
+                q.pop_front();
+            }
+#endif
+            int x=q.front();
+            q.pop_front();
+            inqueue[x]++;
+#ifdef LLL
+            sumofdis-=dist[x];
+#endif
+            EACH_EDGE(e, Net[x])
+            {
+                int v=e->ver;
+                if(e->forward && dist[v]>dist[x]+e->cap)
+                {
+                    predecessor[v]=x;
+                    dist[v]=dist[x]+e->cap;
+                    if((inqueue[v]&1)==0)
+                    {
+#ifdef SLF
+                        if(q.empty() || dist[v]<=dist[q.front()])
+                            q.push_front(v);
+                        else
+#endif
+                            q.push_back(v);
+                        inqueue[v]++;
+#ifdef LLL
+                        sumofdis+=dist[v];
+#endif
+                        if((inqueue[v]>>1)>=n)
+                        {
+                            //negative cycle;
+                            return -1;
+                        }
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+
+#endif
 
 int main()
 {
-    Graph a(10,20);
+    Graph<double> g(10,20);
 
 }

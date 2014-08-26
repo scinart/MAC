@@ -1,5 +1,5 @@
 //
-// Time-stamp: <2014-08-24 15:21:36 scinart>
+// Time-stamp: <2014-08-26 09:48:36 scinart>
 
 #include <iostream>
 #include <cstring>
@@ -41,13 +41,8 @@ using namespace std;
     #define EACH(it,A) for (auto it=A.begin(); it!=A.end(); ++it)
     #define REACH(it,A) for (auto it=A.rbegin(); it!=A.rend(); ++it)
   #else
-    #ifdef __STRICT_ANSI__
-      #define EACH(it,A) for (__typeof__(A.begin()) it=A.begin(); it!=A.end(); ++it)
-      #define REACH(it,A) for (__typeof__(A.rbegin()) it=A.rbegin(); it!=A.rend(); ++it)
-    #else
-      #define EACH(it,A) for (typeof(A.begin()) it=A.begin(); it!=A.end(); ++it)
-      #define REACH(it,A) for (typeof(A.rbegin()) it=A.rbegin(); it!=A.rend(); ++it)
-    #endif
+    #define EACH(it,A) for (__typeof__(A.begin()) it=A.begin(); it!=A.end(); ++it)
+    #define REACH(it,A) for (__typeof__(A.rbegin()) it=A.rbegin(); it!=A.rend(); ++it)
   #endif
 #else
   #define EACH(it,A) for (auto it=A.begin(); it!=A.end(); ++it)
