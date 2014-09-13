@@ -4,4 +4,4 @@
 my.cc是程序。
 std.cc是标程。
 然后调用
-$ ./test.sh 文件夹名
+$ ./verify.sh 文件夹名
