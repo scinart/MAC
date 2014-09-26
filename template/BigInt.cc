@@ -1,7 +1,7 @@
 // -*- coding: utf-8 -*-
 // C++ Big integer Class.
 // created: 2014-06-27 18:46:37
-// Time-stamp: <2014-09-17 17:57:33 scinart>
+// Time-stamp: <2014-09-26 16:26:51 scinart>
 
 #include <cctype>
 #include <string>
@@ -100,21 +100,21 @@ public:
         return false;
     }
 
-    BigInt operator+(const BigInt& rhs)const;
+    const BigInt operator+(const BigInt& rhs)const;
     BigInt& operator+=(const BigInt& rhs);
-    BigInt operator-()const{return BigInt(digits, -sign, base);};
-    BigInt operator-(const BigInt& rhs)const;
+    const BigInt operator-()const{return BigInt(digits, -sign, base);};
+    const BigInt operator-(const BigInt& rhs)const;
     BigInt& operator-=(const BigInt& rhs);
-    BigInt operator*(const BigInt& rhs)const;
+    const BigInt operator*(const BigInt& rhs)const;
     BigInt& operator*=(const uint_8& digit);
     BigInt& operator*=(const BigInt& rhs);
-    BigInt operator/(const BigInt& rhs)const;
+    const BigInt operator/(const BigInt& rhs)const;
     BigInt divDigit(const uint_8& digit)const;
 private:
     BigInt& operator/=(const uint_8& digit);
 public:
     BigInt& operator/=(const BigInt& rhs);
-    BigInt operator%(const BigInt& rhs)const;
+    const BigInt operator%(const BigInt& rhs)const;
     BigInt& operator%=(const BigInt& rhs);
     bool divideBy(const BigInt& div,BigInt& q,BigInt& re);
 
@@ -140,43 +140,6 @@ private:
 
 };
 
-template <class GEN>
-BigInt lbound (BigInt& first, BigInt& last, const BigInt& val, GEN gen)
-{
-    BigInt it;
-    BigInt count, step;
-    count = last-first;
-    while (count.sign>0)
-    {
-        it = first; step=count/2; it+=step;
-        if (gen(it)<val)
-        {
-            first=++it;
-            count-=step+1;
-        }
-        else count=step;
-    }
-    return first;
-}
-template <class GEN>
-BigInt uboundabs (BigInt first, BigInt last, const BigInt& val, GEN gen)
-{
-    BigInt it;
-    BigInt count, step;
-    count=last-first;
-    while (count.sign>0)
-    {
-        it = first; step=count.divDigit(2); it+=step;
-        if (!(val.abslt(gen(it))))
-        {
-            first=++it;
-            count-=step+1;
-        }
-        else count=step;
-    }
-  return first;
-}
-
 
 BigInt& BigInt::normalize()
 {
@@ -188,7 +151,7 @@ BigInt& BigInt::normalize()
     }
     return *this;
 }
-BigInt BigInt::operator+(const BigInt& rhs)const
+const BigInt BigInt::operator+(const BigInt& rhs)const
 {
     if(digits.length()>=rhs.digits.length())
     {
@@ -281,7 +244,7 @@ BigInt& BigInt::operator+=(const BigInt& rhs)
     }
     return *this;
 }
-BigInt BigInt::operator*(const BigInt& rhs)const
+const BigInt BigInt::operator*(const BigInt& rhs)const
 {
     if(digits.length()>=rhs.digits.length())
         return (BigInt(*this)*=rhs);
@@ -356,7 +319,7 @@ BigInt& BigInt::operator*=(const BigInt& rhs)
         this->sign = this_sign;
     return *this;
 }
-BigInt BigInt::operator-(const BigInt& rhs)const
+const BigInt BigInt::operator-(const BigInt& rhs)const
 {
     return ((BigInt(*this))-=(rhs));
 }
@@ -368,7 +331,7 @@ BigInt BigInt::divDigit(const uint_8& rhs)const
 {
     return BigInt(*this)/=rhs;
 }
-BigInt BigInt::operator/(const BigInt& rhs)const
+const BigInt BigInt::operator/(const BigInt& rhs)const
 {
     assert(rhs.sign);
     BigInt ret(BigInt::ZERO(base));
@@ -383,7 +346,14 @@ BigInt BigInt::operator/(const BigInt& rhs)const
         // pro < this : +ub
         if(abslt(lb*rhs)) lb>>=1;
         else rb<<=1;
-        ret = --uboundabs(lb, rb, *this, [&rhs](const BigInt& pt){return pt*rhs;});
+
+        BigInt mid;
+        while ((mid = (lb+rb).divDigit(2)) , lb<rb)
+        if (!(this->abslt(mid*rhs)))
+            lb=++mid;
+        else
+            rb=mid;
+        ret = --lb;
     }
     if((rhs.sign>0 && sign<0) || (rhs.sign<0 && sign>0))
     {
@@ -410,7 +380,7 @@ BigInt& BigInt::operator/=(const BigInt& rhs)
     (*this)=(*this)/rhs;
     return *this;
 }
-BigInt BigInt::operator%(const BigInt& rhs)const
+const BigInt BigInt::operator%(const BigInt& rhs)const
 {
     return (*this)-(*this)/rhs*rhs;
 }
@@ -467,9 +437,15 @@ int main()
     BigInt b(1, "654321");
 
     assert((a*b).to_string() == string("80780370281511962971041"));
-    b.force_negative();
+    assert((a/b).to_string() == string("188679241515"));
+    assert((a%b).to_string() == string("318006"));
+    assert(a==(a/b*b+a%b));
+
+    b=-b;
     assert(((a*b).to_string()) == string("-80780370281511962971041"));
-    assert((a*b).is_negetive());
+    assert((a/b).to_string() == string("-188679241516"));
+    assert((a%b).to_string() == string("-336315"));
+    assert(a==(a/b*b+a%b));
 
     do
     {   // 50以下数的阶乘
@@ -492,16 +468,6 @@ int main()
     assert(a8cnt==047);
 
 
-    string x,y;
-    while(cin>>x>>y)
-    {
-        BigInt xx(1,x),yy(1,y);
-        cout<<xx*yy<<' '<<xx/yy<<' '<<xx%yy<<'\n';
-    }
-    // cout<<a8/b8<<'\n';
-    // cout<<a8%b8<<'\n';
-    // cout<<a8/(-b8)<<'\n';
-    // cout<<a8%(-b8)<<'\n';
     return 0;
 }
 
