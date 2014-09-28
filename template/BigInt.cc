@@ -1,7 +1,7 @@
 // -*- coding: utf-8 -*-
 // C++ Big integer Class.
 // created: 2014-06-27 18:46:37
-// Time-stamp: <2014-09-26 16:26:51 scinart>
+// Time-stamp: <2014-09-28 09:45:22 scinart>
 
 #include <cctype>
 #include <string>
@@ -58,7 +58,7 @@ public:
     BigInt(const BigInt& rhs):digits(rhs.digits),sign(rhs.sign),base(rhs.base){}
     BigInt(long long u):base(10)
     {
-        int v=u;if(v<0)v=-v; digits=(SSTR(v));
+        long long v=u;if(v<0)v=-v; digits=(SSTR(v));
         if(u>0)sign=1;else sign=(u?-1:0);
         std::reverse(digits.begin(), digits.end());
         for_each(digits.begin(),digits.end(),dec_0_);
@@ -476,5 +476,5 @@ int main()
 
 
 // Local Variables:
-// eval:(progn (hs-minor-mode t) (let ((hs-state '((1651 1763 hs) (1884 2084 hs) (2154 2196 hs) (2248 2419 hs) (2934 3297 hs) (5090 5374 hs) (5804 6002 hs) (6054 6209 hs) (6258 8154 hs) (8206 8337 hs) (8388 8602 hs) (8651 10203 hs) (10255 10293 hs) (10342 10371 hs) (10422 10454 hs) (10506 11139 hs) (11190 11390 hs) (11439 11483 hs) (11535 11572 hs) (11621 11665 hs) (11715 11876 hs) (11927 11955 hs) (12005 12039 hs) (12090 12116 hs) (12167 12523 hs) (12574 12601 hs))) (the-mark 'scinartspecialmarku2npbmfydfnwzwnpywxnyxjr)) (dolist (i hs-state) (if (car i) (progn (goto-char (car i)) (hs-find-block-beginning) (hs-hide-block-at-point nil nil))))) (goto-char 14160) (recenter-top-bottom))
+// eval:(progn (hs-minor-mode t) (let ((hs-state '((1651 1763 hs) (1884 2090 hs) (2160 2202 hs) (2254 2425 hs) (2940 3303 hs) (5068 5266 hs) (5324 5479 hs) (5528 7424 hs) (7482 7613 hs) (7664 7878 hs) (7927 9479 hs) (9537 9575 hs) (9624 9653 hs) (9704 9736 hs) (9794 10528 hs) (10579 10779 hs) (10828 10872 hs) (10930 10967 hs) (11016 11060 hs) (11110 11271 hs) (11322 11350 hs) (11400 11434 hs) (11485 11511 hs) (11562 11918 hs) (11969 11996 hs))) (the-mark 'scinartspecialmarku2npbmfydfnwzwnpywxnyxjr)) (dolist (i hs-state) (if (car i) (progn (goto-char (car i)) (hs-find-block-beginning) (hs-hide-block-at-point nil nil))))) (goto-char 12771) (recenter-top-bottom))
 // End:
