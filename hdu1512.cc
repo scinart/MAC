@@ -1,6 +1,6 @@
-// Time-stamp: <2014-09-20 21:11:03 scinart>
-// created at (>>>ISO_DATE<<<) (>>>TIME<<<)
-// (>>>FILE<<<)
+// Time-stamp: <2014-10-01 16:08:56 scinart>
+// created at 2014-10-01 15:45:52
+// hdu1512.cc
 
 #include <iostream>
 #include <cstring>
@@ -88,29 +88,169 @@ inline istream& RD(T& a, U& b, V& c,W& d,X& e){return cin>>a>>b>>c>>d>>e;}
 
 
 // 杭电only
-// inline int ri(){int x;scanf("%d", &x);return x;}
-// inline double rd(){double x;scanf("%lf", &x);return x;}
-// #ifdef ONLINE_JUDGE
-// inline long long rll(){long long x;scanf("%I64d", &x);return x;}
-// #else
-// inline long long rll(){long long x;scanf("%lld", &x);return x;}
-// #endif
+inline int ri(){int x;scanf("%d", &x);return x;}
+inline double rd(){double x;scanf("%lf", &x);return x;}
+#ifdef ONLINE_JUDGE
+inline long long rll(){long long x;scanf("%I64d", &x);return x;}
+#else
+inline long long rll(){long long x;scanf("%lld", &x);return x;}
+#endif
 
 template <typename T>
 void checkmin(T& a,const T& b){if(b<a)a=b;}
 template <typename T>
 void checkmax(T& a, const T& b){if(b>a)a=b;}
+#define TT template<class T, class Op>
+template<class T, class Op = less<T> >
+struct Node {
+    T key;
+    int dist;
+    Node<T, Op> *L;
+    Node<T, Op> *R;
+    Node():L(NULL),R(NULL){}
+    Node(T k,int d=0):key(k),dist(d),L(NULL),R(NULL){}
+};
+TT void merge(Node<T, Op>* &A, Node<T, Op>* &B)
+{
+    if(A==NULL) {swap(A,B);return;}
+    if(B==NULL) return;
+    if(Op()(B->key,A->key))
+        swap(A,B);
+    merge(A->R,B);
+    if((A->L==NULL) || (A->R!=NULL && A->R->dist>A->L->dist))
+        swap(A->R,A->L);
+    if(A->R==NULL)A->dist=0;
+    else A->dist=A->R->dist+1;
+    B=NULL;
+}
+TT void destroy(Node<T, Op>* &tree)
+{
+    if(tree->L)destroy(tree->L);
+    if(tree->R)destroy(tree->R);
+    delete tree;
+    tree=NULL;
+}
+TT class LeftishTree;
+TT void merge(LeftishTree<T, Op>&, LeftishTree<T, Op>&);
+template<class T, class Op = less<T> >
+class LeftishTree
+{
+    Node<T, Op>* root;
+    size_t SZ;
+    LeftishTree(const LeftishTree& rhs);
+public:
+    LeftishTree& operator=(LeftishTree& rhs){if(this==&rhs)return *this;clear();root=rhs.root;rhs.root=NULL;return *this;} //transfer ownership.
+    T top() const { return root->key; }
+    bool empty() const { return root == NULL; }
+    size_t size() const { return SZ; }
+    friend void merge<>(LeftishTree<T, Op>&, LeftishTree<T, Op>&);
+    void pop();
+    void insert(T val);
+    LeftishTree():root(NULL),SZ(0){}
+    LeftishTree(const T& elem):SZ(1){root=new Node<T,Op>(elem);}
+    void clear(){if(root)destroy(root);SZ=0;}
+    ~LeftishTree(){clear();}
+};
+TT void merge(LeftishTree<T, Op>& A, LeftishTree<T, Op>& B) {
+    merge(A.root, B.root);
+    A.SZ += B.SZ;
+    B.SZ = 0;
+}
+TT void LeftishTree<T, Op>::insert(T val) {
+    Node<T, Op>* newTree = new Node<T, Op>(val);
+    merge(root, newTree);
+    ++SZ;
+}
+TT void LeftishTree<T, Op>::pop() {
+    merge(root->L, root->R);
+    Node<T, Op>* newRoot = root->L;
+    delete root;
+    root = newRoot;
+    --SZ;
+}
+
+
+namespace DSET {
+
+const int MAXN = 100010;
+int pre[MAXN],Rank[MAXN];
+LeftishTree<int, greater<int> > tres[MAXN];
+int degree;
+void INIT(int n)
+{
+    degree=n;
+    REP_1(i,n) pre[i]=i, Rank[i]=1;
+}
+
+int FIND(int x)
+{
+    int t,r=x;
+    while(x!=pre[x]) x=pre[x];
+    while(r!=x)
+    {
+        t=pre[r];
+        pre[r]=x;
+        r=t;
+    }
+    return x;
+}
+
+inline int TEST(int x,int y)
+{
+    return FIND(x)==FIND(y);
+}
+int UNION(int a,int b)
+{
+    a=FIND(a);
+    b=FIND(b);
+    if(a==b) return a;
+    degree--;
+    if(Rank[a]>=Rank[b])
+        return pre[b]=a, Rank[a]+=Rank[b], a;
+    else
+        return pre[a]=b, Rank[b]+=Rank[a], b;
+}
+
+}
 
 int main()
 {
+
 #ifdef ECLIPSE
     freopen("in.txt", "r", stdin);
 #endif
-    std::ios::sync_with_stdio(false);
 
-    (>>>POINT<<<)
-
-
-
-    return 0;
+    int N,M;
+    while(scanf("%d", &N)!=EOF)
+    {
+        DSET::INIT(N);
+        REP_1(i,N)
+        {
+            DSET::tres[i].insert(ri());
+        }
+        M=ri();
+        REP(i,M)
+        {
+            int x=DSET::FIND(ri());
+            int y=DSET::FIND(ri());
+            if(x==y)
+            {
+                puts("-1");
+            }
+            else
+            {
+                DSET::tres[x].insert(DSET::tres[x].top()/2);
+                DSET::tres[x].pop();
+                DSET::tres[y].insert(DSET::tres[y].top()/2);
+                DSET::tres[y].pop();
+                int un = DSET::UNION(x, y);
+                merge(DSET::tres[x],DSET::tres[y]);
+                DSET::tres[un]=DSET::tres[x];
+                printf("%d\n",(DSET::tres[un].top()));
+            }
+        }
+        REP_1(i,N)DSET::tres[i].clear();
+    }
 }
+
+
