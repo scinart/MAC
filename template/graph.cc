@@ -18,71 +18,15 @@ using namespace std;
 #define ITERTREE
 #define MDST //should leave node 0 blank.
              //must be strongly connected.
+#define KRUSKAL
 
-typedef double EDGE_TYPE; //double or int
-typedef double EDGE_TYPE_LL; //double or long long
+typedef ______ EDGE_TYPE;    //double or int
+typedef ______ EDGE_TYPE_LL; //double or long long
 #define EPS eps; //eps or 0;
 
-#ifdef MDST
-const int maxnode = 110<<1;
-#else
-const int maxnode = 110;
-#endif
-const double DOUBLE_INF = 1234567890123;
-const double eps=1e-6;
-
-#ifdef TARJAN
-int DFN[maxnode];
-int LOW[maxnode];
-bool instack[maxnode];
-int Stap[maxnode];
-int Belong[maxnode];
-int Stop, Bcnt, Dindex;
-#endif
-
-#ifdef LCA
-  #ifndef ITERTREE
-    #define ITERTREE
-  #endif
-int _d[maxnode][21]; // 21>log(N)
-bool rmqinited;
-#endif
-
-#ifdef ITERTREE
-int iteridx[maxnode]; //第几是哪个节点
-int noderank[maxnode]; //节点第几
-int itertrace[maxnode<<1]; //这里存的是rank.
-int firstappearintrace[maxnode]; //节点第一次出现在itertrace中。
-int rnk;
-int trace;
-#endif
-
-#ifdef DFS
-  #ifndef COLOR
-    #define COLOR
-  #endif
-#endif
-
-#ifdef DEG
-int indegree[maxnode];
-int outdegree[maxnode];
-#endif
-#ifdef COLOR
-int color[maxnode];//0,1,2 is WHITE, GREY, BLACK, respectively.
-enum {WHITE,GREY,BLACK};
-#endif
 
 
-#ifdef BELLMAN //a.k.a bellman ford.
-EDGE_TYPE_LL dist[maxnode];
-int inqueue[maxnode]; //inqueue[node]>>1是次数，inqueue[node]&1是在不在queue里
-int predecessor[maxnode];
-#endif
 
-
-#ifdef MDST
-
-EDGE_TYPE_LL maxdist;
 #define TX template<class T>
 TX struct Node {
     T key;
@@ -161,6 +105,69 @@ TX void merge(LeftistTree<T>& A, LeftistTree<T>& B) {
     B.SZ = 0;
 }
 
+
+#define NUMNODES 110
+#ifdef MDST
+const int maxnode = NUMNODES<<1;
+#else
+const int maxnode = NUMNODES;
+#endif
+const double DOUBLE_INF = 1234567890123;
+const double eps=1e-6;
+
+#ifdef TARJAN
+int DFN[maxnode];
+int LOW[maxnode];
+bool instack[maxnode];
+int Stap[maxnode];
+int Belong[maxnode];
+int Stop, Bcnt, Dindex;
+#endif
+
+#ifdef LCA
+  #ifndef ITERTREE
+    #define ITERTREE
+  #endif
+int _d[maxnode][21]; // 21>log(N)
+bool rmqinited;
+#endif
+
+#ifdef ITERTREE
+int iteridx[maxnode]; //第几是哪个节点
+int noderank[maxnode]; //节点第几
+int itertrace[maxnode<<1]; //这里存的是rank.
+int firstappearintrace[maxnode]; //节点第一次出现在itertrace中。
+int rnk;
+int trace;
+#endif
+
+#ifdef DFS
+  #ifndef COLOR
+    #define COLOR
+  #endif
+#endif
+
+#ifdef DEG
+int indegree[maxnode];
+int outdegree[maxnode];
+#endif
+#ifdef COLOR
+int color[maxnode];//0,1,2 is WHITE, GREY, BLACK, respectively.
+enum {WHITE,GREY,BLACK};
+#endif
+
+
+#ifdef BELLMAN //a.k.a bellman ford.
+EDGE_TYPE_LL dist[maxnode];
+int inqueue[maxnode]; //inqueue[node]>>1是次数，inqueue[node]&1是在不在queue里
+int predecessor[maxnode];
+#endif
+
+
+#ifdef MDST
+
+EDGE_TYPE_LL maxdist;
+
 template<typename TT>struct edge;
 edge<EDGE_TYPE>* in[maxnode];
 int prov[maxnode];
@@ -168,6 +175,9 @@ int parent[maxnode];
 std::deque<int> children[maxnode];
 LeftistTree<edge<EDGE_TYPE>* > P[maxnode];
 
+#endif
+
+#if defined MDST || defined KRUSKAL
 namespace DSET {
 
 int pre[maxnode],Rank[maxnode];
@@ -209,7 +219,6 @@ int unio(int a,int b)
 }
 
 }
-
 #endif
 
 template<typename TT>
@@ -564,6 +573,26 @@ struct Graph{
         }while(!R.empty());
         return ans;
     }
+
+#ifdef KRUSKAL
+    void kruskal()
+    {
+        DSET::init(n);
+        edge<TT>* edges = new edge<TT>[data-buffer];
+        edge<TT>* theend = edges+(data-buffer);
+        memcpy(edges,buffer,unsigned(data)-unsigned(buffer));
+        sort(edges,theend,[](const edge<TT>& a,const edge<TT>& b){return a->cap<b.cap;});
+        for(edge<TT>* it=edges;it!=theend;it++,it++)
+        {
+            if(DSET::fin(it->rev->ver)!=DSET::fin(it->ver))
+            {
+                //do stuff;
+                DSET::unio(it->rev->ver,it->ver);
+            }
+        }
+        free(edges);
+    }
+#endif
 #endif
 #ifdef BELLMAN
 #define SLF
