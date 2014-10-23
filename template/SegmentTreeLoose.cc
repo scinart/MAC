@@ -36,6 +36,15 @@ inline void clearMark(Marktype& m){m=0;}
 const bool MERGABLE = true;
 */
 
+/*mark为区间加减，val为最大值
+inline void mergeMark(Marktype& son, const Marktype& father){son+=father;}
+inline void setMark(Marktype& where, const Marktype& what){where=what;}
+inline Valtype mergeValVal(const Valtype& a,const Valtype& b){return max(a,b);}
+inline const Valtype withValue(const Marktype& mark, const Valtype& val, int l, int r){return mark+val;}
+inline void clearMark(Marktype& m){m=0;}
+const bool MERGABLE = true;
+*/
+
 class SegmentTree
 {//zero indexed left close right open tree.
 public:

@@ -15,6 +15,8 @@ int main(int argc, char *argv[])
 
 
 
+    char a[100];
+    scanf("%[^n]",a);
 
 
 

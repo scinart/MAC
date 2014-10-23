@@ -1,4 +1,4 @@
-// Time-stamp: <2014-09-20 21:11:03 scinart>
+// Time-stamp: <2014-10-06 23:28:43 scinart>
 // created at (>>>ISO_DATE<<<) (>>>TIME<<<)
 // (>>>FILE<<<)
 
@@ -85,16 +85,6 @@ template <typename T, typename U, typename V, typename W>
 inline istream& RD(T& a, U& b, V& c,W& d){return cin>>a>>b>>c>>d;}
 template <typename T, typename U, typename V, typename W, typename X>
 inline istream& RD(T& a, U& b, V& c,W& d,X& e){return cin>>a>>b>>c>>d>>e;}
-
-
-// 杭电only
-// inline int ri(){int x;scanf("%d", &x);return x;}
-// inline double rd(){double x;scanf("%lf", &x);return x;}
-// #ifdef ONLINE_JUDGE
-// inline long long rll(){long long x;scanf("%I64d", &x);return x;}
-// #else
-// inline long long rll(){long long x;scanf("%lld", &x);return x;}
-// #endif
 
 template <typename T>
 void checkmin(T& a,const T& b){if(b<a)a=b;}

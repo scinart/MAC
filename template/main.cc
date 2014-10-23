@@ -1,5 +1,5 @@
 //
-// Time-stamp: <2014-08-26 09:48:36 scinart>
+// Time-stamp: <2014-10-18 19:05:44 scinart>
 
 #include <iostream>
 #include <cstring>
@@ -89,13 +89,22 @@ void checkmin(T& a,const T& b){if(b<a)a=b;}
 template <typename T>
 void checkmax(T& a, const T& b){if(b>a)a=b;}
 
+// 杭电only
+inline int ri(){int x;scanf("%d", &x);return x;}
+inline double rd(){double x;scanf("%lf", &x);return x;}
+#ifdef ONLINE_JUDGE
+inline long long rll(){long long x;scanf("%I64d", &x);return x;}
+#else
+inline long long rll(){long long x;scanf("%lld", &x);return x;}
+#endif
+
 int main()
 {
     std::ios::sync_with_stdio(false);
 
-    char c;
-    cin>>c;
-    cout<<c<<'\n';
+    int a,b;
+    while(scanf("%d%d", &a,&b))
+        printf("%d\n",a-b);
 
     return 0;
 }

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-limit=100;
+limit=10;
 cd $1
 stdtime="0.00"
 mytime="0.00"
