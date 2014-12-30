@@ -13,6 +13,33 @@ T mod(T N, T M)
     else
         return 0;
 }
+// 符号与第二个数一致
+// 5 -3
+// (1)·5+(2)·-3=-1
+// -5 3
+// (1)·-5+(2)·3=1
+template<typename T>
+void exEuAid(T& a,T& b,T& res,const T& x, const T& y)
+{
+    if(y==0)
+    {
+        res=x;
+        a=1;
+        b=0;
+    }
+    else
+    {
+        exEuAid(a,b,res,y,mod(x,y));
+        std::swap(a,b);
+        b=-b-a*(mod(x,y));
+    }
+}
+template<typename T>
+void exEu(T& a,T& b,T& res, const T& x, const T& y)
+{
+    if(x>=y)return exEuAid(a,b,res,x,y);
+    else return exEuAid(b,a,res,y,x);
+}
 
 int gcd(int a, int b)
 {
